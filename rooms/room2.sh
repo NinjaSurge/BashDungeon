@@ -1,11 +1,15 @@
 #!/bin/bash
-
+# Arrays
+layer=("┏━━━━━━━━━━━┓" "┃wwwwwwwwwww┃" "┃wwwwwwwwwww┃" "┃▒▒▒▒▒▒▒▒▒▒▒┃" "┃   h       ┃" "┃           ┃" "┃           ┃" "┗━━━━┓ ┏━━━━┛")
+processThis=("w" "\\e[44m \\e[0m" "▒" "\\e[34m▒\\e[0m" "h" "\\e[31mh\\e[0m")
+hazardX=(2 5)
+hazardY=(2 5)
+# misc
 lives=3
-
-layer=("┏━━━━━━━━━━━┓" "┃\033[44m           \033[0m┃" "┃\033[44m           \033[0m┃" "┃\033[34m▒▒▒▒▒▒▒▒▒▒▒\033[0m┃" "┃           ┃" "┃           ┃" "┃           ┃" "┗━━━━┓ ┏━━━━┛")
 width=$layer
 width=${#width}
 height=${#layer[@]}
+debug=1
 
 exitGame() {
   clear
@@ -13,11 +17,46 @@ exitGame() {
   exit
 }
 
+
+processMap() {
+  echo -e "\033[20;0f"
+  for ((i=0; i <= $height; i++))
+  do
+    process=${layer[$i]}
+    process="${process//${processThis[0]}/${processThis[1]}}"
+    process="${process//${processThis[2]}/${processThis[3]}}"
+    process="${process//${processThis[4]}/${processThis[5]}}"
+    layer[$i]="$process"
+    if [ $debug -eq 1 ]
+    then
+      echo -e "$process"
+    fi
+  done
+}
+
+deprocessMap() {
+  # echo -e "\033[20;0f"
+  for ((i=0; i <= $height; i++))
+  do
+    process=${layer[$i]}
+    process="${process//${processThis[5]}/${processThis[4]}}"
+    process="${process//${processThis[3]}/${processThis[2]}}"
+    process="${process//${processThis[1]}/${processThis[0]}}"
+    layer[$i]="$process"
+    # if [ $debug -eq 1 ]
+    # then
+    #   echo -e "$process"
+    # fi
+  done
+}
+
 map() {
-  echo -e "\033[$[playerY-1];0f${layer[$playerY-2]}"
-  echo -e "\033[${playerY};0f${layer[$playerY-1]}"
-  echo -e "\033[$[playerY+1];0f${layer[$playerY]}"
-  echo -e "\033[${playerY};${playerX}f@"
+  processMap
+    echo -e "\033[$[playerY-1];0f${layer[$playerY-2]}"
+    echo -e "\033[${playerY};0f${layer[$playerY-1]}"
+    echo -e "\033[$[playerY+1];0f${layer[$playerY]}"
+    echo -e "\033[${playerY};${playerX}f@"
+  deprocessMap
 }
 
 boundries() {
@@ -50,11 +89,19 @@ nextRoom() {
 }
 
 hazards() {
-  if [ $playerX -eq 4 ] && [ $playerY -eq 2 ]
-  then
-    bash ./gameOver.sh
-    exit
-  fi
+  for i in ${#hazardX[@]}
+  do
+    ix=${hazardX[i-1]}
+    echo -e "\033[18;0fix: $ix"
+    iy=${hazardY[i-1]}
+    echo -e "\033[19;0fiy: $iy"
+    if [ $playerX -eq $ix ] && [ $playerY -eq $iy ]
+    then
+      # echo "$playerX $ix"
+      # echo "$playerY $iy"
+      lives=$[lives-1]
+    fi
+  done
 }
 
 handleInput() {
@@ -89,6 +136,25 @@ setPlayer() {
   # printf "\033[${playerY};${playerX}f@"
 }
 
+information() {
+  if [ $debug -eq 1 ]
+  then
+    echo -e "\033[${height};0f"
+    echo -e "Lives: $lives"
+    echo "PlayerX: $playerX "
+    echo "PlayerY: $playerY "
+    echo "width: $width"
+    echo "height: $height"
+    printf "Input: "
+    read -d'' -s -n1 input
+  else
+    echo -e "\033[${height};0f"
+    echo -e "Lives: $lives"
+    printf "Input: "
+    read -d'' -s -n1 input
+  fi
+}
+
 preSetup() {
   clear
   if [ "$1" == "room1" ]
@@ -104,17 +170,17 @@ Game() {
   do
     printf '\033[0;0H'
     handleInput
+    hazards
     setPlayer $playerX $playerY
     boundries
-    map
+    map # "center"
     nextRoom
-    # hazards
-    echo -e "\033[${height};0f"
-    echo -e "Lives: $lives"
-    echo "PlayerX: $playerX "
-    echo "PlayerY: $playerY "
-    printf "Input: "
-    read -d'' -s -n1 input
+    information
+    if [ $lives -lt 1 ]
+    then
+      bash ./Menus/gameOver.sh
+      exit
+    fi
     # clear
   done
 }

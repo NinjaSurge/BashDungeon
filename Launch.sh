@@ -28,7 +28,7 @@ elif [ "$input" == "h" ]
 else
   clear
   echo
-  bash ./tools/center -n -t "Not a vaild Option!"
+  bash ./tools/center -n -t "Not a vaild Option!" -b "\033[30;41m" -e "\033[0m"
   sleep 1
   bash ./Launch.sh
   exit

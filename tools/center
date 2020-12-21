@@ -1,6 +1,6 @@
 #!/bin/bash
 
-while getopts ":ht:nb:e:s:" opt; do
+while getopts ":ht:nb:e:s:r" opt; do
   case $opt in
     h)
     echo "Usage:
@@ -21,6 +21,9 @@ while getopts ":ht:nb:e:s:" opt; do
     ;;
     s)
     subtract=$OPTARG
+    ;;
+    r)
+    return=TRUE
     ;;
     \?)
     echo "Invalid option: -$OPTARG" >&2
@@ -69,23 +72,27 @@ centerf() {
   done
   printf "$space$begining$1$end"
 }
-#
-# centerO() {
-  #   begining=$2
-  #   end=$3
-  #   for ((i = 0; i <= $CENTER; i++))
-  #   do
-    #     # echo $i
-    #     printf " " >> space.txt
-    #   done
-    #   space=$(cat ./space.txt)
-    #   rm ./space.txt
-    #   echo -e "$space$begining$1$end"
-    # }
+
+centerO() {
+  space=""
+  length=${#1}
+  length=$[length-subtract]
+  length=$[length/2]
+  center=$[CENTER-length]
+  for ((i = 0; i <= $center; i++))
+  do
+    # echo $i
+    space=" ${space}"
+  done
+  echo ${#space}
+}
 
 if [ "$newline" == "TRUE" ]
 then
   center "$text" $beginingPram $endPram
+elif [ "$return" == "TRUE" ]
+then
+  centerO "$text"
 else
   centerf "$text" $beginingPram $endPram
 fi
