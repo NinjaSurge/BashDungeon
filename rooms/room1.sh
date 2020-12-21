@@ -11,10 +11,10 @@ map() {
   echo "┃     ┃"
   echo "┃     ┃"
   echo "┗━━━━━┛"
-  # bash ./center -n -t "┏━┛ ┗━┓"
-  # bash ./center -n -t "┃     ┃"
-  # bash ./center -n -t "┃     ┃"
-  # bash ./center -n -t "┗━━━━━┛"
+  # bash ./tools/center -n -t "┏━┛ ┗━┓"
+  # bash ./tools/center -n -t "┃     ┃"
+  # bash ./tools/center -n -t "┃     ┃"
+  # bash ./tools/center -n -t "┗━━━━━┛"
 }
 
 boundries() {

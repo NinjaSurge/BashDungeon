@@ -79,7 +79,7 @@ handleInput() {
     playerX=$[playerX-1]
   elif [ "$input" == 'e' ]
   then
-    bash ./Menu.sh
+    bash ./Menus/Menu.sh
   fi
 }
 

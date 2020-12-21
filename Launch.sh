@@ -1,17 +1,17 @@
 #!/bin/bash
 clear
-bash ./center -n -t "First Time? try the Help Menu"
-bash ./center -n -t "Welcome to"
-bash ./center -n -t "Bash Dungeon Crawler"
-bash ./center -n -t "┏━━━━━━━━━━┓" -b "\033[1;30;47m" -e "\033[0m"
-bash ./center -n -t "┃ Options: ┃" -b "\033[1;30;47m" -e "\033[0m"
-bash ./center -n -t "┣━━━━━━━━━━┫" -b "\033[1;30;47m" -e "\033[0m"
-bash ./center -n -t "┃ Start: s ┃" -b "\033[1;30;47m" -e "\033[0m"
-bash ./center -n -t "┃ Help:  h ┃" -b "\033[1;30;47m" -e "\033[0m"
-bash ./center -n -t "┃ Quit:  q ┃" -b "\033[1;30;47m" -e "\033[0m"
-bash ./center -n -t "┗━━━━━━━━━━┛" -b "\033[1;30;47m" -e "\033[0m"
-bash ./center -n -t "   Choice:  " -b "\033[41m" -e "\033[0m"
-bash ./center -t ""
+bash ./tools/center -n -t "First Time? try the Help Menu"
+bash ./tools/center -n -t "Welcome to"
+bash ./tools/center -n -t "Bash Dungeon Crawler"
+bash ./tools/center -n -t "┏━━━━━━━━━━┓" -b "\033[1;30;47m" -e "\033[0m"
+bash ./tools/center -n -t "┃ Options: ┃" -b "\033[1;30;47m" -e "\033[0m"
+bash ./tools/center -n -t "┣━━━━━━━━━━┫" -b "\033[1;30;47m" -e "\033[0m"
+bash ./tools/center -n -t "┃ Start: s ┃" -b "\033[1;30;47m" -e "\033[0m"
+bash ./tools/center -n -t "┃ Help:  h ┃" -b "\033[1;30;47m" -e "\033[0m"
+bash ./tools/center -n -t "┃ Quit:  q ┃" -b "\033[1;30;47m" -e "\033[0m"
+bash ./tools/center -n -t "┗━━━━━━━━━━┛" -b "\033[1;30;47m" -e "\033[0m"
+bash ./tools/center -n -t "   Choice:  " -b "\033[41m" -e "\033[0m"
+bash ./tools/center -t ""
 read -d'' -s -n1 input
 
 if [ "$input" == "s" ]
@@ -23,12 +23,12 @@ then
   exit
 elif [ "$input" == "h" ]
   then
-    bash ./helpMenu.sh
+    bash ./Menus/helpMenu.sh
     exit
 else
   clear
   echo
-  bash ./center -n -t "Not a vaild Option!"
+  bash ./tools/center -n -t "Not a vaild Option!"
   sleep 1
   bash ./Launch.sh
   exit
