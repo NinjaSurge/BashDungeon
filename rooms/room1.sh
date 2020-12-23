@@ -1,7 +1,7 @@
 #!/bin/bash
 
 lives=3
-layer=("┏━┛ ┗━┓" "┃     ┃" "┃     ┃" "┗━━━━━┛")
+layer=("┏━┛ ┗━┓" "┃     ┃" "┗━━━━━┛")
 width=$layer
 width=${#width}
 height=${#layer[@]}
@@ -12,19 +12,12 @@ exitGame() {
   exit
 }
 
-map() {
- if [ "$1" == "center" ]
- then
-   bash ./tools/center -n -t "\033[$[plwayerY-1];0f${layer[$playerY-2]}"
-   bash ./tools/center -n -t "\033[${playerY};0f${layer[$playerY-1]}"
-   bash ./tools/center -n -t "\033[$[playerY+1];0f${layer[$playerY]}"
-   bash ./tools/center -n -t "\033[${playerY};${playerX}f@"
-else
-    echo -e "\033[$[playerY-1];0f${layer[$playerY-2]}"
-    echo -e "\033[${playerY};0f${layer[$playerY-1]}"
-    echo -e "\033[$[playerY+1];0f${layer[$playerY]}"
-    echo -e "\033[${playerY};${playerX}f@"
-  fi
+render() {
+  space=$(bash ./tools/center -r -t $layer)
+  echo -e "\033[$[playerY-1];${space}f${layer[$playerY-2]}"
+  echo -e "\033[${playerY};${space}f${layer[$playerY-1]}"
+  echo -e "\033[$[playerY+1];${space}f${layer[$playerY]}"
+  echo -e "\033[${playerY};$[playerX+$[space-1]]f@"
 }
 
 boundries() {
@@ -62,7 +55,7 @@ handleInput() {
     exitGame
   elif [ "$input" == 'r' ]
   then
-    bash ./rooms/newRoom1.sh
+    bash ./rooms/room1.sh
     exit
   elif [ "$input" == 'w' ]
   then
@@ -122,7 +115,7 @@ Game() {
     handleInput
     setPlayer $playerX $playerY
     boundries
-    map # "center"
+    render # "center"
     nextRoom
     information "debug"
   done
