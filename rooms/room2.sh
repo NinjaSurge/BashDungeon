@@ -1,6 +1,6 @@
 #!/bin/bash
 # Arrays
-layer=("┏━━━━━━━━━━━┓" "┃wwxwwwwwwww┃" "┃wwwwwwwwwww┃" "┃▒▒▒▒▒▒▒▒▒▒▒┃" "┃aaaaxaaaaaa┃" "┃aaaaaaaaaaa┃" "┃aaaaaaaaaaa┃" "┗━━━━┓a┏━━━━┛")
+layer=("┏━━━━━━━━━━━┓" "┃xwxwwwxwwww┃" "┃wwwwwwwwwww┃" "┃▒▒▒▒▒▒▒▒▒▒▒┃" "┃aaaaxaaaaaa┃" "┃aaaaaaaaaaa┃" "┃aaaaaaaaaaa┃" "┗━━━━┓a┏━━━━┛")
 processThis=("w" "\\e[44m \\e[0m" "▒" "\\e[34m▒\\e[0m" "x" "\\e[31mx\\e[0m" "X" "\\e[31mW\\e[0m" "a" "\\e[30m \\e[0m")
 hazardX=()
 hazardY=()
@@ -17,21 +17,26 @@ exitGame() {
   exit
 }
 
-this=()
 preProcessMap() {
-  for ((i=0; i <= $height; i++))
+  for ((i=0; i < $height; i++))
   do
-    process=${layer[$i]}
-    echo -e "\033[25;0f"
-    if [[ "${layer[$i]}" == *x* ]]
-    then
-      Col=0
-      Col=$(echo ${layer[$i]} | grep -aob 'x')
-      Col=$(echo ${Col:0:1})
-      Col=$[Col-1]
-      hazardX+=($Col)
-      hazardY+=($[i+1])
-    fi
+    # echo "${layer[$i]}"
+    for ((x=0; x < $width; x++))
+    do
+      Col=${layer[$i]:$x:1}
+      if [ "$Col" == "x" ]
+      then
+        # echo This
+        # echo "XPos: $[x-1]"
+        hazardX+=($[x+1])
+        # echo "YPos: $[i+1]"
+        hazardY+=($[i+1])
+      fi
+      # printf "$x: "
+      # echo $Col
+      # echo
+    done
+    # echo "x: $x y: $i"
   done
 }
 
@@ -68,22 +73,6 @@ render() {
   echo -e "\033[$[playerY+$[1+yMod]];${space}f${layer[$[playerY]]}"
 
   echo -e "\033[$[playerY+$yMod];$[playerX+$[space-1]]f@"
-  # echo -e "\033[$[playerY-1];0f${layer[$[playerY-2]]}"
-  #
-  # echo -e "\033[$[playerY];0f${layer[$[playerY-1]]}"
-  #
-  # echo -e "\033[$[playerY+1];0f${layer[$[playerY]]}"
-  #
-  # echo -e "\033[$[playerY];$[playerX]f@"
-  # if [ $debug -eq 1 ]
-  # then
-  #   echo -e "\033[20;0fLayer1:\t\t$[playerY-1+$yMod]"
-  #   echo -e "\033[21;0fLayer2:\t\t$[playerY+$[yMod]]"
-  #   echo -e "\033[22;0fLayer3:\t\t$[playerY+$[1+yMod]]"
-  #   echo -e "\033[23;0fDrawn PlayerY:\t$[playerY+1+$yMod]"
-  #   echo -e "\033[24;0fDrawn PlayerX:\t$[playerX+$[space-1]]"
-  # fi
-  # deprocessMap
 }
 
 preRender() {
